@@ -71,6 +71,10 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
+    <OutDir>D:\vrBIE\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>D:\vrBIE\$(Platform)\$(Configuration)\</IntDir>
+    <IncludePath>$(ProjectDir);D:\MyWorkspace\SDKx64\glew-1.10.0\include;D:\MyWorkspace\SDKx64\eigen-3.2.6;D:\MyWorkspace\SDKx64\glew-1.13.0\include;D:\MyWorkspace\SDKx64\freeglut-2.8.1\include;D:\MyWorkspace\SDKx64\glsdk_0_5_2\glm;D:\MyWorkspace\SDKx64\boost_1_58_0_vs2013;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <LibraryPath>D:\MyWorkspace\SDKx64\freeglut-2.8.1\lib\x64\vs2013;D:\MyWorkspace\SDKx64\glew-1.10.0\lib_x64_2013;D:\MyWorkspace\SDKx64\glew-1.13.0\lib_x64;D:\MyWorkspace\SDKx64\freeglut-2.8.1\lib\x64;D:\MyWorkspace\SDKx64\boost_1_58_0_vs2013\lib;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -79,7 +83,7 @@
     <LinkIncremental>false</LinkIncremental>
     <OutDir>D:\vrBIE\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>D:\vrBIE\$(Platform)\$(Configuration)\</IntDir>
-    <IncludePath>D:\MyWorkspace\SDKx64\glew-1.10.0\include;D:\MyWorkspace\SDKx64\eigen-3.2.6;D:\MyWorkspace\SDKx64\glew-1.13.0\include;D:\MyWorkspace\SDKx64\freeglut-2.8.1\include;D:\MyWorkspace\SDKx64\glsdk_0_5_2\glm;D:\MyWorkspace\SDKx64\boost_1_58_0_vs2013;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <IncludePath>$(ProjectDir);D:\MyWorkspace\SDKx64\glew-1.10.0\include;D:\MyWorkspace\SDKx64\eigen-3.2.6;D:\MyWorkspace\SDKx64\glew-1.13.0\include;D:\MyWorkspace\SDKx64\freeglut-2.8.1\include;D:\MyWorkspace\SDKx64\glsdk_0_5_2\glm;D:\MyWorkspace\SDKx64\boost_1_58_0_vs2013;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
     <LibraryPath>D:\MyWorkspace\SDKx64\freeglut-2.8.1\lib\x64\vs2013;D:\MyWorkspace\SDKx64\glew-1.10.0\lib_x64_2013;D:\MyWorkspace\SDKx64\glew-1.13.0\lib_x64;D:\MyWorkspace\SDKx64\freeglut-2.8.1\lib\x64;D:\MyWorkspace\SDKx64\boost_1_58_0_vs2013\lib;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -106,6 +110,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>glew32.lib;freeglut.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -164,7 +169,13 @@
     <ClInclude Include="vrBase\vrRotation.h" />
     <ClInclude Include="vrBase\vrString.h" />
     <ClInclude Include="vrBase\vrTypes.h" />
+    <ClInclude Include="vrGeometry\VR_Geometry_MeshDataStruct.h" />
     <ClInclude Include="vrGlobalConf.h" />
+    <ClInclude Include="vrPhysics\BEMMaterials.h" />
+    <ClInclude Include="vrPhysics\bemTriangleElem.h" />
+    <ClInclude Include="vrPhysics\bemVertex.h" />
+    <ClInclude Include="vrPhysics\TriangleBasisFuncs.h" />
+    <ClInclude Include="vrPhysics\vrBEM3D.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="constant_numbers.cpp" />
@@ -178,7 +189,11 @@
     <ClCompile Include="vrBase\vrRotation.cpp" />
     <ClCompile Include="vrBase\vrString.cpp" />
     <ClCompile Include="vrBase\vrTypes.cpp" />
+    <ClCompile Include="vrGeometry\VR_Geometry_MeshDataStruct.cpp" />
     <ClCompile Include="vrGlobalConf.cpp" />
+    <ClCompile Include="vrPhysics\bemTriangleElem.cpp" />
+    <ClCompile Include="vrPhysics\bemVertex.cpp" />
+    <ClCompile Include="vrPhysics\vrBEM3D.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

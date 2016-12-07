@@ -9,8 +9,8 @@
 #include "vrBase/vrRotation.h"
 #include "vrGlobalConf.h"
 #include "vrBase/vrLog.h"
-//#include "VR_Geometry_MeshDataStruct.h"
-//#include "vrBEM3D.h"
+#include "vrGeometry/VR_Geometry_MeshDataStruct.h"
+#include "vrPhysics/vrBEM3D.h"
 using namespace std;
 using namespace VR;
 
@@ -28,7 +28,7 @@ MyFloat const3 = 1 / (4 * pi*(1 - mu));
 MyFloat const2 = (3 - 4 * mu);
 MyFloat const1 = 1 / (8 * pi*shearMod * (1 - mu));
 const MyFloat kappa = 3 - 4 * mu;
-//vrBEM3D g_BEM3D(E , mu ,shearMod, const4 ,const3 , const2 ,const1 , kappa );
+vrBEM3D g_BEM3D(E , mu ,shearMod, const4 ,const3 , const2 ,const1 , kappa );
 //global p knotVec controlPts elRange bsFnConn dispConn tracConn
 const MyInt p = 2; //degree of basis functions
 const MyInt numMeshes = 1;
@@ -64,7 +64,7 @@ namespace VR
 		g_trackball_1.IssueGLrotation();
 		glScalef(g_scene_scale, g_scene_scale, g_scene_scale);
 		glutSolidCube(0.3);
-		//g_BEM3D.renderScene();
+		g_BEM3D.renderScene();
 	}
 
 	void initPhysSystem()
@@ -72,7 +72,7 @@ namespace VR
 		
 
 		//1.load 3d obj mesh
-		//g_BEM3D.initPhysicalSystem(vrCStr(GlobalConf::g_str_Obj_meshName));
+		g_BEM3D.initPhysicalSystem(vrCStr(GlobalConf::g_str_Obj_meshName));
 		
 	}
 }

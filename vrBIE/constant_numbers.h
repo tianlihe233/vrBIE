@@ -52,6 +52,11 @@ namespace VR
 			}
 		}
 
+		static bool IsEqual(const MyVec3& b, const MyVec3& e, int absDelta = 1)
+		{
+			return isEqual(b(0), e(0), absDelta) && isEqual(b(1), e(1), absDelta) && isEqual(b(2), e(2), absDelta);
+		}
+
 		static bool IsEqual(float f1, float f2, int absDelta = 1)
 		{
 			int i1, i2;

@@ -30,5 +30,5 @@
 #define MyNotice
 #define USE_TBB (1)
 
-#define  USE_CornerProblem (0)
+#define USE_Mantic_CMat (1)
 #endif//_bemMarco_h_

@@ -22,6 +22,12 @@
     <Filter Include="vrBase\log">
       <UniqueIdentifier>{02653501-2498-4337-a27c-2830552cde98}</UniqueIdentifier>
     </Filter>
+    <Filter Include="vrGeometry">
+      <UniqueIdentifier>{b06262a3-bdb4-4feb-bc6a-1b00f3d14001}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="vrPhysics">
+      <UniqueIdentifier>{2b3d2187-0090-4194-a694-846de513c69f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="conf\log.conf">
@@ -83,6 +89,24 @@
     <ClInclude Include="vrGlobalConf.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="vrGeometry\VR_Geometry_MeshDataStruct.h">
+      <Filter>vrGeometry</Filter>
+    </ClInclude>
+    <ClInclude Include="vrPhysics\BEMMaterials.h">
+      <Filter>vrPhysics</Filter>
+    </ClInclude>
+    <ClInclude Include="vrPhysics\bemTriangleElem.h">
+      <Filter>vrPhysics</Filter>
+    </ClInclude>
+    <ClInclude Include="vrPhysics\bemVertex.h">
+      <Filter>vrPhysics</Filter>
+    </ClInclude>
+    <ClInclude Include="vrPhysics\TriangleBasisFuncs.h">
+      <Filter>vrPhysics</Filter>
+    </ClInclude>
+    <ClInclude Include="vrPhysics\vrBEM3D.h">
+      <Filter>vrPhysics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="vrBase\vrConfigureParser.cpp">
@@ -120,6 +144,18 @@
     </ClCompile>
     <ClCompile Include="LookUp.cpp">
       <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="vrGeometry\VR_Geometry_MeshDataStruct.cpp">
+      <Filter>vrGeometry</Filter>
+    </ClCompile>
+    <ClCompile Include="vrPhysics\bemTriangleElem.cpp">
+      <Filter>vrPhysics</Filter>
+    </ClCompile>
+    <ClCompile Include="vrPhysics\bemVertex.cpp">
+      <Filter>vrPhysics</Filter>
+    </ClCompile>
+    <ClCompile Include="vrPhysics\vrBEM3D.cpp">
+      <Filter>vrPhysics</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
