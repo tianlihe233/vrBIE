@@ -138,7 +138,7 @@ namespace VR
 	{
 		infoLog << "loadOBJ" << std::endl;
 		m_ObjMesh_ptr = Geometry::MeshDataStructPtr(new Geometry::MeshDataStruct);
-		m_ObjMesh_ptr->loadOBJ(lpszObjName, false, true);
+		m_ObjMesh_ptr->loadOBJ(lpszObjName, false, false);
 
 		const std::vector< vrGLMVec3 >& points = m_ObjMesh_ptr->points;
 		const std::vector<vrInt>& faces = m_ObjMesh_ptr->faces;
@@ -283,8 +283,51 @@ namespace VR
 		return retMat;
 	}
 
+	void print_map_originId_dstId_set_trianleId(const std::map< std::pair<int, int>, std::set<int> >& map_originId_dstId_set_trianleId)
+	{
+		for (iterAllOf(ci, map_originId_dstId_set_trianleId))
+		{
+			auto myPair = (*ci).first;
+			auto mySet = (*ci).second;
+
+			
+			std::cout << std::endl;
+			for (iterAllOf(ci_in, mySet))
+			{
+				std::cout << "<< " << myPair.first << " , " << myPair.second << " >> " << *ci_in << std::endl;
+			}
+			std::cout << std::endl;
+		}
+	}
+
+	void vrBEM3D::compute_Guiggiani_CMatrix_for_Test()
+	{
+		const vrFloat fai_1 = (1.0 / 6.0) * numbers::MyPI;
+		const vrFloat fai_2 = (2.0 / 6.0) * numbers::MyPI;
+		const vrFloat theta = (62.632 / 180.0) * numbers::MyPI;
+		/*const vrFloat fai_1 = (0.0 / 6.0) * numbers::MyPI;
+		const vrFloat fai_2 = (3.0 / 6.0) * numbers::MyPI;
+		const vrFloat theta = (90.0 / 180.0) * numbers::MyPI;*/
+
+		const vrFloat C = 1.0 / (8*numbers::MyPI * 0.7);
+		const vrFloat a = 0.4;
+		vrMat3 CMat;
+		CMat.coeffRef(0, 0) = C * (( ( ((fai_2 - fai_1) / 2.0) + ((std::sin(2*fai_2)-std::sin(2*fai_1))/4.0))* (2.0 - 3.0 * std::cos(theta) + std::pow(std::cos(theta),3))) + (a * (fai_2-fai_1) * (1 - std::cos(theta))));
+		CMat.coeffRef(1, 1) = CMat.coeffRef(0, 0);
+		CMat.coeffRef(2, 2) = C * (((fai_2 - fai_1)*(1 - std::pow(std::cos(theta), 3))) + (a * (fai_2 - fai_1) * (1 - std::cos(theta))));
+		CMat.coeffRef(0, 1) = CMat.coeffRef(1, 0) = C * ((std::pow(std::sin(fai_2), 2) - std::pow(std::sin(fai_1), 2)) / 2.0) * (2.0 - 3.0 * std::cos(theta) + std::pow(std::cos(theta), 3));
+		CMat.coeffRef(0, 2) = CMat.coeffRef(2, 0) = C * (std::sin(fai_2) - std::sin(fai_1)) * (std::pow(std::sin(theta),3));
+		CMat.coeffRef(1, 2) = CMat.coeffRef(2, 1) = C * (vrNotice/*std::cos(fai_2) - std::cos(fai_1)*/std::cos(fai_1) - std::cos(fai_2)) * (std::pow(std::sin(theta), 3));
+
+		std::cout << "compute_Guiggiani_CMatrix_for_Test : " << std::endl << CMat << std::endl;
+	}
+
 	void vrBEM3D::sortVertexConnectedVertexSurface()
 	{
+		/*
+		1. r(v1) = v1 - x, the length of the vector r is one ? 
+		2. the mantic matrix is suit for tangent surface is not along the coordinate see figure 5 in A General Algorithm for Multidimensional Cauchy Principal Value Integrals in the Boundary Element Method
+		*/
 		std::ofstream outfile("D:/vrBIE/out.txt");
 		const MyInt vertexSize = Vertex::getVertexSize();
 		for (int v = 0; v < vertexSize; ++v)
@@ -299,6 +342,8 @@ namespace VR
 			Q_ASSERT(vecShareElement.size()>1);
 
 			outfile << "vertex id = " << v << "  pos : " << origin_x.transpose() << std::endl;
+			std::cout << "vertex id = " << v << "  pos : " << origin_x.transpose() << std::endl;
+			std::cout << "vecShareElement.size is " << vecShareElement.size() << std::endl;
 			for (iterAllOf(ci, vecShareElement))
 			{
 				const TriangleElemPtr triPtr = *ci;
@@ -322,7 +367,7 @@ namespace VR
 					//outfile << (curVtxPtr->getPos()).transpose() << "  " << (vtx_2_Ptr->getPos()).transpose() << "  " << triId << std::endl;
 				}
 			}
-
+			print_map_originId_dstId_set_trianleId(map_originId_dstId_set_trianleId);
 			{
 				
 				std::map< vrInt, VertexPtr > mapSortedVertex;
@@ -347,9 +392,11 @@ namespace VR
 
 				VertexPtr nextVtxPtr = triPtr->getVertex(index2to1(originIndexInCurrentTriangle, vtx_1_index_InCurrentTriangle));
 				MyInt nextVtxId = nextVtxPtr->getId();
+
+				
 				while (!map_originId_dstId_set_trianleId.empty())
 				{
-					
+					print_map_originId_dstId_set_trianleId(map_originId_dstId_set_trianleId);
 					{
 						
 						std::set<int>& refTriSet = map_originId_dstId_set_trianleId.at(std::make_pair(originVtxId, nextVtxId));
@@ -438,6 +485,45 @@ namespace VR
 
 				
 				outfile << Cmatrix << std::endl;
+
+				if (2 == v)
+				{
+					/*vertex id = 0  pos : 0.866025      0.5      0.5
+						vertex id = 1  pos : 0 0 1
+						vertex id = 2  pos : 0 0 0
+						vertex id = 3  pos : 0.5 0.866025      0.5*/
+					for (int tri = 0; tri < TriangleElem::getTriangleSize();++tri )
+					{
+						TriangleElemPtr  curTriPtr = TriangleElem::getTriangle(tri);
+
+						std::cout << "triangle " << tri << " : " << (curTriPtr->getVertex(0)->getPos().transpose()) << " , " << curTriPtr->getVertex(0)->getId() << " ## " << (curTriPtr->getVertex(1)->getPos().transpose()) << " , " << curTriPtr->getVertex(1)->getId() << " ## " << (curTriPtr->getVertex(2)->getPos().transpose()) << " , " << curTriPtr->getVertex(2)->getId() << std::endl;
+					}
+
+
+					{
+						MyVec3 n1 = TriangleElem::getTriangle(0)->getElemNormals();
+						MyVec3 n2(0, 1, 0);
+						vrFloat t0 = (acos(n1.dot(n2) / (n1.norm()*n2.norm())) / numbers::MyPI) * 180;
+
+						std::cout << "arc 0 = " << t0 << std::endl;
+					}
+					{
+						MyVec3 n1 = TriangleElem::getTriangle(1)->getElemNormals();
+						MyVec3 n2(0, 1, 0);
+						vrFloat t1 = (acos(n1.dot(n2) / (n1.norm()*n2.norm())) / numbers::MyPI) * 180;
+
+						std::cout << "arc 1 = " << t1 << std::endl;
+					}
+					{
+						MyVec3 n1 = TriangleElem::getTriangle(2)->getElemNormals();
+						MyVec3 n2(0, 0, 1);
+						vrFloat t2 = (acos(n1.dot(n2) / (n1.norm()*n2.norm())) / numbers::MyPI) * 180;
+
+						std::cout << "arc 2 = " << t2 << std::endl;
+					}
+					vrPause;
+				}
+
 				/*outfile << "sorted point : " << originVtxId << std::endl;
 				for (iterAllOf(ci, mapSortedVertex))
 				{
@@ -457,7 +543,7 @@ namespace VR
 
 			}
 		}
-
+		compute_Guiggiani_CMatrix_for_Test();
 		outfile.close();
 		vrExit;
 	}

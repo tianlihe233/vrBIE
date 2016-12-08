@@ -30,6 +30,7 @@ namespace VR
 		vrFloat sgn(vrFloat val);
 		vrMat3 tensor_product(const MyVec3 vec_a, const MyVec3& vec_b);
 		void sortVertexConnectedVertexSurface();
+		void compute_Guiggiani_CMatrix_for_Test();
 		MyInt index2to1(const MyInt idx0, const MyInt idx1, const MyInt sum = Geometry::vertexs_per_tri)
 		{
 			MyInt nRet = sum - idx0 - idx1;
